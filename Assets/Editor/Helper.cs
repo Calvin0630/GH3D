@@ -3,29 +3,40 @@ using System.Collections;
 
 public static class Helper {
 
-    public static Vector2 BezierCurve(Vector2[] controlPoints, float t, int indexOffset)
-    { // this will be rewritten to use 4 control points instead of 3
-        if (controlPoints.Length < 3) throw new UnityException("Points array must have at least 3 elements");
+    public static Vector2 CubicBezier(Vector2[] controlPoints, float t)
+    {
+        if (controlPoints.Length < 4) throw new UnityException("Points array must have at least 4 elements");
 
-        t = Mathf.Clamp(t, 0, 1f);
+        t = Mathf.Max(0, t);
 
-        int segments = (controlPoints.Length - 1) / 2;
-
-        float segmentWidth = 1.0f / segments;
-        if (t <= segmentWidth * (indexOffset + 1))
+        if (t <= 1.0f)
         {
-            t = (t % segmentWidth) / segmentWidth;
-            float oneMinusT = 1.0f - t;
-            int offset = indexOffset * 2;
-            return oneMinusT * oneMinusT * controlPoints[0 + offset] + 2 * oneMinusT * t * controlPoints[1 + offset] + t * t * controlPoints[2 + offset];
+            float oneMinusT = 1f - t;
+            Vector2 term1 = oneMinusT * oneMinusT * oneMinusT * controlPoints[0];
+            Vector2 term2 = 3f * oneMinusT * oneMinusT * t * controlPoints[1];
+            Vector2 term3 = 3f * oneMinusT * t * t * controlPoints[2];
+            Vector2 term4 = t * t * t * controlPoints[3];
+
+            return term1 + term2 + term3 + term4;
         }
-        else if (t <= 1.0f)
+        else if (controlPoints.Length - 4 >= 4)
         {
-            return BezierCurve(controlPoints, t, indexOffset + 1);
+            Vector2[] nextControlPoints = new Vector2[controlPoints.Length - 4];
+            for (int i = 0; i < nextControlPoints.Length; i++)
+            {
+                nextControlPoints[i] = controlPoints[4 + i];
+            }
+            return CubicBezier(nextControlPoints, t - 1.0f);
         }
         else
         {
-            return Vector2.zero;
+            return CubicBezier(controlPoints, 1.0f);
         }
+        
+    }
+
+    public static  bool IsPowerOfTwo(int x)
+    {
+        return (x != 0) && ((x & (x - 1)) == 0);
     }
 }

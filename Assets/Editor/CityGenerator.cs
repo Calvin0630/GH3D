@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class CityGenerator : EditorWindow
 {
     int minCitySize = 2;
-    int maxCitySize = 2048;
+    int maxCitySize = 1024;
     // Settings
     Vector3 cityCenter;
     int citySize;
@@ -34,7 +34,9 @@ public class CityGenerator : EditorWindow
         // SETTINGS
         EditorGUILayout.LabelField("Settings", EditorStyles.boldLabel);
             cityCenter = EditorGUILayout.Vector3Field("City Center", cityCenter);
-            citySize = EditorGUILayout.IntSlider("City Size", citySize, minCitySize, maxCitySize);
+            // only assign values that are a power of 2
+            int size = EditorGUILayout.IntField("City Size", citySize);
+            citySize = Helper.IsPowerOfTwo(size) ? size : citySize;
         // CONTROLS
         EditorGUILayout.LabelField("Controls", EditorStyles.boldLabel);
             if (GUILayout.Button("Generate"))
