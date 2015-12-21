@@ -5,7 +5,7 @@ public class PlaneGenerator : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        GetComponent<MeshFilter>().mesh = CreateGround(254);
+        GetComponent<MeshFilter>().mesh = CreateGround(10, 3);
     }
 
     // Update is called once per frame
@@ -14,9 +14,12 @@ public class PlaneGenerator : MonoBehaviour {
     }
 
     //creates a square mesh where segments is the number of squares along the top and side. Segments must be < 255
-    public Mesh CreateGround(int segments) {
+    public Mesh CreateGround(int size, int vertsPerWorldUnit = 1) {
         Mesh mesh = new Mesh();
+        int segments = size * vertsPerWorldUnit;
         int numberOfSquares = (segments) * (segments);
+        float vertDistance = 1 / (float)vertsPerWorldUnit;
+        print("verDist: " + vertDistance);
         Vector3[] verts = new Vector3[(segments + 1) * (segments + 1)];
         Vector2[] uvs = new Vector2[(segments + 1) * (segments + 1)];
         int[] tris = new int[numberOfSquares * 6];
@@ -27,7 +30,7 @@ public class PlaneGenerator : MonoBehaviour {
         for (int i = 0; i <= segments; i++) {
             for (int j = 0; j <= segments; j++) {
                 //start at top left and goes to the right
-                verts[i * (segments + 1) + j ] = new Vector3(j + -(segments / 2), 0, (segments / 2) - i);
+                verts[i * (segments + 1) + j ] = new Vector3(j * vertDistance + -((float)size / 2), 0, ((float)size / 2) - i *vertDistance);
             }
         }
         //does tris
