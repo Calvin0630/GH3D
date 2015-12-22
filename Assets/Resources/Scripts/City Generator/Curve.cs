@@ -28,4 +28,10 @@ public class Curve : MonoBehaviour {
             controlPoints.Add(controlPoints[controlPoints.Count - 1] + riverDir);
         }
     }
+
+    public void RemoveSegment() {
+        if(controlPoints.Count > 1) {
+            controlPoints.RemoveRange(controlPoints.Count - 3, 3);
+        }
+    }
 }

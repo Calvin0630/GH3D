@@ -25,40 +25,50 @@ public class CurveEditor : Editor {
         EditorGUILayout.LabelField("Control Points", EditorStyles.boldLabel);
         controlPointColor = EditorGUILayout.ColorField("Color", controlPointColor);
         controlPointRadius = EditorGUILayout.FloatField("Radius", controlPointRadius);
-        if(GUILayout.Button("Add Segment")) {
+        EditorGUILayout.LabelField("Controls", EditorStyles.boldLabel);
+        if (GUILayout.Button("Add Segment")) {
             targetComponent.AddSegment();
-            Debug.Log("Add ");
+        }
+        if(GUILayout.Button("Remove Segment")) {
+            targetComponent.RemoveSegment();
         }
     }
 
     void OnSceneGUI() {
         List<Vector3> controlPoints = targetComponent.controlPoints;
         int controlPointCount = controlPoints.Count;
-        if(controlPointCount > 0) {
-            if(lastPos == null) {
-                lastPos = targetComponent.transform.position;
-            }
-            Vector3 deltaPos = targetComponent.transform.position - lastPos;
+        if (lastPos == null) {
             lastPos = targetComponent.transform.position;
-            for(int i = 0; i < controlPointCount - 3; i += 3) {
+        }
+        Vector3 deltaPos = targetComponent.transform.position - lastPos;
+        lastPos = targetComponent.transform.position;
+        if (controlPointCount == 1) {
+            UpdateHandle(controlPoints, 0, deltaPos);
+        } else if (controlPointCount > 1) {
+            for (int i = 0; i < controlPointCount - 3; i += 3) {
                 Handles.DrawBezier(
                     controlPoints[i],
                     controlPoints[i + 3],
                     controlPoints[i + 1],
                     controlPoints[i + 2],
                     curveColor,
-                    new Texture2D(1, 2), // replace
-                    curveWidth); // change to user defined
+                    new Texture2D(1, 2), // replace!!!
+                    curveWidth);
                 Handles.color = controlPointColor;
                 Handles.DrawLine(controlPoints[i], controlPoints[i + 1]);
                 Handles.DrawLine(controlPoints[i + 3], controlPoints[i + 2]);
-                for (int j = 0; j < 4; j++) {
-                    controlPoints[i + j] = Handles.PositionHandle(controlPoints[i + j] + deltaPos, Quaternion.identity);
-                    controlPoints[i + j] = new Vector3(controlPoints[i + j].x, targetComponent.transform.position.y, controlPoints[i + j].z);
-                    Handles.color = controlPointColor;
-                    Handles.SphereCap(i + j, controlPoints[i + j], Quaternion.identity, controlPointRadius);
+                UpdateHandle(controlPoints, 0, deltaPos);
+                for (int j = 1; j < 4; j++) {
+                    UpdateHandle(controlPoints, i + j, deltaPos);
                 }
             }
         }
+    }
+
+    void UpdateHandle(List<Vector3> controlPoints, int index, Vector3 deltaPos) {
+        controlPoints[index] = Handles.PositionHandle(controlPoints[index] + deltaPos, Quaternion.identity);
+        controlPoints[index] = new Vector3(controlPoints[index].x, targetComponent.transform.position.y, controlPoints[index].z);
+        Handles.color = controlPointColor;
+        Handles.SphereCap(index, controlPoints[index], Quaternion.identity, controlPointRadius);
     }
 }
