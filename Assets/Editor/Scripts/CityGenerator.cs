@@ -28,7 +28,7 @@ public class CityGenerator : EditorWindow {
             if(GUILayout.Button("Add River")) {
                 AddRiver();
             }
-            if(GUILayout.Button("Generate")) {
+            if(GUILayout.Button("Generate City")) {
                 GenerateCity();
             }
     }

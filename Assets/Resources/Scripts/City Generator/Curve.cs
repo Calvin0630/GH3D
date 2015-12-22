@@ -4,10 +4,14 @@ using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class Curve : MonoBehaviour {
-    public List<GameObject> controlPoints = new List<GameObject>();
+    public List<Vector3> controlPoints = new List<Vector3>();
 
     void Start() {
         AddSegment();
+    }
+
+    void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 
     public void AddSegment() {
@@ -15,25 +19,15 @@ public class Curve : MonoBehaviour {
         Vector3 riverDir = Vector3.forward;
         Vector3 riverEndPos = Vector3.zero;
         if (points > 0) {
-            riverDir = (controlPoints[points - 1].transform.position - controlPoints[points - 2].transform.position).normalized;
-            riverEndPos = controlPoints[points - 1].transform.position;
+            riverDir = (controlPoints[points - 1] - controlPoints[points - 2]).normalized;
+            riverEndPos = controlPoints[points - 1];
         }
         if (points == 0) {
-            AddControlPoint();
+            controlPoints.Add(transform.position + transform.forward);
         }
         // add 3 more control points to control points list
-        for(int i = 0; i < 3; i++) {
-            GameObject controlPoint = AddControlPoint();
-            Vector3 pos = riverEndPos + riverDir + new Vector3(0, 0, i);
-            controlPoint.transform.position = pos;
+        for(int i = 1; i < 4; i++) {
+            controlPoints.Add(riverEndPos + riverDir * i);
         }
-    }
-
-    GameObject AddControlPoint() {
-        GameObject controlPoint = new GameObject("Control Point");
-        controlPoint.transform.SetParent(transform);
-        controlPoint.AddComponent<CurveControlPoint>();
-        controlPoints.Add(controlPoint);
-        return controlPoint;
     }
 }
