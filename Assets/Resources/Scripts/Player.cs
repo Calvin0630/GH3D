@@ -11,7 +11,6 @@ public class Player : MonoBehaviour {
     HookPoint endOfRope = new HookPoint();
 	// Use this for initialization
 	void Start () {
-        Cursor.visible = false;
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.SetVertexCount(0);
         
