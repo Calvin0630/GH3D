@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PlaneGenerator.cs" />
+    <Compile Include="Assets\Resources\Scripts\City Generator\Curve.cs" />
+    <Compile Include="Assets\Resources\Scripts\City Generator\CurveControlPoint.cs" />
     <Compile Include="Assets\Resources\Scripts\CityManager.cs" />
     <Compile Include="Assets\Resources\Scripts\HookPoint.cs" />
     <Compile Include="Assets\Resources\Scripts\Player.cs" />

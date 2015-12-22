@@ -119,9 +119,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\CityGenerator.cs" />
-    <Compile Include="Assets\Editor\Helper.cs" />
-    <Compile Include="Assets\Editor\PropertyQuadTree.cs" />
+    <Compile Include="Assets\Editor\Scripts\CityGenerator.cs" />
+    <Compile Include="Assets\Editor\Scripts\CurveEditor.cs" />
+    <Compile Include="Assets\Editor\Scripts\Helper.cs" />
+    <Compile Include="Assets\Editor\Scripts\PropertyQuadTree.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
