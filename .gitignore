@@ -1,6 +1,9 @@
-.vs
-Temp/*
-UnityVS.GH3D.CSharp.csproj
-UnityVS.GH3D.CSharp.Editor.csprog
-UnityVS.GH3D.CSharp.Plugins.csprog
-UnityVS.GH3D.sln
+Library/
+ProjectSettings/
+Temp/
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.userprefs
+*.DS_store
