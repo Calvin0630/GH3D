@@ -5,43 +5,38 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(Curve))]
 public class CurveEditor : Editor {
-    Curve targetComponent;
+    Curve targetComp;
     Vector3 lastPos;
-    Color curveColor = Color.yellow;
-    float curveWidth = 10.0f;
-    Color controlPointColor = Color.red;
-    Color controlPointSelectedColor = Color.blue;
-    float controlPointRadius = 0.2f;
 
     void OnEnable() {
-        targetComponent = (Curve)target;
+        targetComp = (Curve)target;
     }
 
     public override void OnInspectorGUI() {
         serializedObject.Update();
         EditorGUILayout.LabelField("Curve", EditorStyles.boldLabel);
-        curveColor = EditorGUILayout.ColorField("Color", curveColor);
-        curveWidth = EditorGUILayout.FloatField("Width", curveWidth);
+        targetComp.curveColor = EditorGUILayout.ColorField("Color", targetComp.curveColor);
+        targetComp.curveWidth = EditorGUILayout.FloatField("Width", targetComp.curveWidth);
         EditorGUILayout.LabelField("Control Points", EditorStyles.boldLabel);
-        controlPointColor = EditorGUILayout.ColorField("Color", controlPointColor);
-        controlPointRadius = EditorGUILayout.FloatField("Radius", controlPointRadius);
+        targetComp.controlPointColor = EditorGUILayout.ColorField("Color", targetComp.controlPointColor);
+        targetComp.controlPointSize = EditorGUILayout.FloatField("Size", targetComp.controlPointSize);
         EditorGUILayout.LabelField("Controls", EditorStyles.boldLabel);
         if (GUILayout.Button("Add Segment")) {
-            targetComponent.AddSegment();
+            targetComp.AddSegment();
         }
         if(GUILayout.Button("Remove Segment")) {
-            targetComponent.RemoveSegment();
+            targetComp.RemoveSegment();
         }
     }
 
     void OnSceneGUI() {
-        List<Vector3> controlPoints = targetComponent.controlPoints;
+        List<Vector3> controlPoints = targetComp.controlPoints;
         int controlPointCount = controlPoints.Count;
         if (lastPos == null) {
-            lastPos = targetComponent.transform.position;
+            lastPos = targetComp.transform.position;
         }
-        Vector3 deltaPos = targetComponent.transform.position - lastPos;
-        lastPos = targetComponent.transform.position;
+        Vector3 deltaPos = targetComp.transform.position - lastPos;
+        lastPos = targetComp.transform.position;
         if (controlPointCount == 1) {
             UpdateHandle(controlPoints, 0, deltaPos);
         } else if (controlPointCount > 1) {
@@ -51,24 +46,24 @@ public class CurveEditor : Editor {
                     controlPoints[i + 3],
                     controlPoints[i + 1],
                     controlPoints[i + 2],
-                    curveColor,
+                    targetComp.curveColor,
                     new Texture2D(1, 2), // replace!!!
-                    curveWidth);
-                Handles.color = controlPointColor;
+                    targetComp.curveWidth);
+                Handles.color = targetComp.controlPointColor;
                 Handles.DrawLine(controlPoints[i], controlPoints[i + 1]);
                 Handles.DrawLine(controlPoints[i + 3], controlPoints[i + 2]);
-                UpdateHandle(controlPoints, 0, deltaPos);
                 for (int j = 1; j < 4; j++) {
                     UpdateHandle(controlPoints, i + j, deltaPos);
                 }
             }
+            UpdateHandle(controlPoints, 0, deltaPos);
         }
     }
 
     void UpdateHandle(List<Vector3> controlPoints, int index, Vector3 deltaPos) {
         controlPoints[index] = Handles.PositionHandle(controlPoints[index] + deltaPos, Quaternion.identity);
-        controlPoints[index] = new Vector3(controlPoints[index].x, targetComponent.transform.position.y, controlPoints[index].z);
-        Handles.color = controlPointColor;
-        Handles.SphereCap(index, controlPoints[index], Quaternion.identity, controlPointRadius);
+        controlPoints[index] = new Vector3(controlPoints[index].x, targetComp.transform.position.y, controlPoints[index].z);
+        Handles.color = targetComp.controlPointColor;
+        Handles.SphereCap(index, controlPoints[index], Quaternion.identity, targetComp.controlPointSize);
     }
 }

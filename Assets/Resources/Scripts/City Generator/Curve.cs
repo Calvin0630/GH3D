@@ -5,6 +5,10 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class Curve : MonoBehaviour {
     public List<Vector3> controlPoints = new List<Vector3>();
+    public Color curveColor = new Color(0, 128f / 255f, 1f);
+    public float curveWidth = 12.0f;
+    public Color controlPointColor = Color.white;
+    public float controlPointSize = 1.0f;
 
     void Start() {
         AddSegment();
@@ -25,7 +29,7 @@ public class Curve : MonoBehaviour {
         }
         // add 3 more control points to control points list
         for(int i = 0; i < 3; i++) {
-            controlPoints.Add(controlPoints[controlPoints.Count - 1] + riverDir);
+            controlPoints.Add(controlPoints[controlPoints.Count - 1] + riverDir * 10f);
         }
     }
 
