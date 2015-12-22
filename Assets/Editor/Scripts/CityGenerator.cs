@@ -21,16 +21,16 @@ public class CityGenerator : EditorWindow {
         titleContent = new GUIContent("City Generator");
         // OPTIONS
         EditorGUILayout.LabelField("Options", EditorStyles.boldLabel);
-            cityCenter = EditorGUILayout.Vector3Field("City Center", cityCenter);
-            citySize = EditorGUILayout.FloatField("City Size", citySize);
+        cityCenter = EditorGUILayout.Vector3Field("City Center", cityCenter);
+        citySize = EditorGUILayout.FloatField("City Size", citySize);
         // CONTROLS
         EditorGUILayout.LabelField("Controls", EditorStyles.boldLabel);
-            if(GUILayout.Button("Add River")) {
-                AddRiver();
-            }
-            if(GUILayout.Button("Generate City")) {
-                GenerateCity();
-            }
+        if(GUILayout.Button("Add River")) {
+            AddRiver();
+        }
+        if(GUILayout.Button("Generate City")) {
+            GenerateCity();
+        }
     }
 
     void AddRiver() {

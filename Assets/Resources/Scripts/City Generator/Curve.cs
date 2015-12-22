@@ -11,23 +11,21 @@ public class Curve : MonoBehaviour {
     }
 
     void OnDrawGizmos() {
-        Gizmos.DrawWireSphere(transform.position, 0.5f);
+        Gizmos.DrawWireCube(transform.position, new Vector3(0.5f, 0.5f, 0.5f));
     }
 
     public void AddSegment() {
         int points = controlPoints.Count;
         Vector3 riverDir = Vector3.forward;
-        Vector3 riverEndPos = Vector3.zero;
-        if (points > 0) {
+        if (points > 1) {
             riverDir = (controlPoints[points - 1] - controlPoints[points - 2]).normalized;
-            riverEndPos = controlPoints[points - 1];
         }
         if (points == 0) {
             controlPoints.Add(transform.position + transform.forward);
         }
         // add 3 more control points to control points list
-        for(int i = 1; i < 4; i++) {
-            controlPoints.Add(riverEndPos + riverDir * i);
+        for(int i = 0; i < 3; i++) {
+            controlPoints.Add(controlPoints[controlPoints.Count - 1] + riverDir);
         }
     }
 }

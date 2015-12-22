@@ -25,6 +25,10 @@ public class CurveEditor : Editor {
         EditorGUILayout.LabelField("Control Points", EditorStyles.boldLabel);
         controlPointColor = EditorGUILayout.ColorField("Color", controlPointColor);
         controlPointRadius = EditorGUILayout.FloatField("Radius", controlPointRadius);
+        if(GUILayout.Button("Add Segment")) {
+            targetComponent.AddSegment();
+            Debug.Log("Add ");
+        }
     }
 
     void OnSceneGUI() {
@@ -36,7 +40,7 @@ public class CurveEditor : Editor {
             }
             Vector3 deltaPos = targetComponent.transform.position - lastPos;
             lastPos = targetComponent.transform.position;
-            for(int i = 0; i < controlPointCount; i += 4) {
+            for(int i = 0; i < controlPointCount - 3; i += 3) {
                 Handles.DrawBezier(
                     controlPoints[i],
                     controlPoints[i + 3],
